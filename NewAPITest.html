@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My webpage</title>
+    <script>
+        function validate() {
+            if (form.API.value == "") {
+                alert("Please provide valid API name!");
+                document.myForm.API.focus();
+                return false;
+            }
+            if (form.url.value == "") {
+                alert("Please provide valid URL!");
+                document.myForm.url.focus();
+                return false;
+            }
+            if (form.schema.value == -1) {
+                alert("Please select the schema!");
+                document.myForm.schema.focus();
+                return false;
+            }
+            if ((form.schema.value != 'get') || (form.schema.value != 'delete')) {
+                if (form.input.value = "") {
+                    alert("Please enter valid input!");
+                    document.myForm.input.focus();
+                    return false;
+                }
+            }
+            return (true);
+        }
+    </script>
+</head>
+<form id="myForm" method="get">
+    <label type="text"></label>
+    <input type="text" name="API" placeholder="Enter APIname"></input>
+    <label type="text"></label><br><br>
+    <input type="url" name="url" placeholder="https://www.example.com"></input>
+    <label for="schema"></label><br><br>
+    <select name="schema" id="schema">
+        <option value="get">GET</option>
+        <option value="post">POST</option>
+        <option value="put">PUT</option>
+        <option value="patch">PATCH</option>
+        <option value="delete">DELETE</option>
+    </select><br><br>
+    <label for="postinput"></label>
+    <textarea id="input" name="input" placeholder="Enter Input" rows="10" cols="50"></textarea><br><br>
+    <button type="submit">Submit</button><br>
+    <br><textarea id="output" name="output" placeholder= "Ouput" rows="10" cols=100></textarea>
+</form>
+
+<body>
+    <script>
+        var form = document.getElementById("myForm");
+        form.onsubmit = function (e) {
+            e.preventDefault();
+            validate();
+            var s = form.schema.value;
+            console.log(s);
+            var u = form.url.value;
+            var a = form.input.value;
+            var choice = document.getElementById("schema").value;
+            switch (choice) {
+                case 'get':
+                    fetch(u, ['get'])
+                        .then(res => res.json())
+                        .then((data) => {
+                            let x = JSON.stringify(data);
+                            document.getElementById('output').innerHTML = x;
+                        })
+                    break;
+                case 'post':
+                    let response = fetch(u, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json; charset = utf-8'
+                        },
+                        body: a
+                    }).then(response => response.json())
+                        .then((data) => {
+                            let y = JSON.stringify(data);
+                            document.getElementById('output').innerHTML = y;
+                        })
+                    break;
+                case 'put':
+                    let resp = fetch(u, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json; charset = utf-8'
+                        },
+                        body: a
+                    }).then(resp => resp.json())
+                        .then((data) => {
+                            console.log(data);
+                            let y = JSON.stringify(data);
+                            document.getElementById('output').innerHTML = y;
+                        })
+                    break;
+                case 'patch':
+                    let respo = fetch(u, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json; charset = utf-8'
+                        },
+                        body: a
+                    }).then(respo => respo.json())
+                        .then((data) => {
+                            console.log(data);
+                            let y = JSON.stringify(data);
+                            document.getElementById('output').innerHTML = y;
+                        })
+                case 'delete':
+                    fetch(u, {
+                        method: 'DELETE'
+                    }).then(respon => respon.json())
+                        .then((data) => {
+                            console.log(data);
+                            let y = JSON.stringify(data);
+                            document.getElementById('output').innerHTML = y;
+
+                        })
+
+                default:
+                    choice = 'null';
+
+            }
+
+            //form.reset();
+        }
+
+
+    </script>
+
+</body>
+
+</html>
